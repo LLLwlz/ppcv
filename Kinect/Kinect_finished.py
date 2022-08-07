@@ -1,13 +1,13 @@
 import sys
+
 import cv2
-import numpy as np
-from paddleocr import PaddleOCR, draw_ocr
 import pykinect_azure as pykinect
+from paddleocr import PaddleOCR
 
 sys.path.insert(1, '../')
 import os
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE' # 修复副本冲突问题
 
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'  # 修复副本冲突问题
 
 if __name__ == "__main__":
 
@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     # Modify camera configuration
     device_config = pykinect.default_configuration
-    # device_config.color_resolution = pykinect.K4A_COLOR_RESOLUTION_1080P
+    device_config.color_resolution = pykinect.K4A_COLOR_RESOLUTION_1080P
     device_config.depth_mode = pykinect.K4A_DEPTH_MODE_WFOV_2X2BINNED
     device_config.synchronized_images_only = True
 
@@ -71,8 +71,6 @@ if __name__ == "__main__":
                 print("Don't want to get any target string")
                 continue
 
-
-
             index = len(result_string)
             for i in range(len(result_string)):
                 if tar_string in result_string[i]:
@@ -90,8 +88,8 @@ if __name__ == "__main__":
                 color_point_2d = pykinect.k4a._k4atypes.k4a_float2_t()
                 color_point_2d.xy.x = int(location[i][0])
                 color_point_2d.xy.y = int(location[i][1])
-                print('color_point_2d\'s x:', color_point_2d.xy.x)
-                print('color_point_2d\'s y:', color_point_2d.xy.y)
+                # print('color_point_2d\'s x:', color_point_2d.xy.x)
+                # print('color_point_2d\'s y:', color_point_2d.xy.y)
 
                 # Chage color_point_2d to depth_point_2d
                 hadle_depth_img = capture.get_depth_image_object().handle()
@@ -138,6 +136,9 @@ if __name__ == "__main__":
                 point_3d = device.calibration.convert_2d_to_3d(depth_point_2d, depth,
                                                                pykinect.K4A_CALIBRATION_TYPE_DEPTH,
                                                                pykinect.K4A_CALIBRATION_TYPE_DEPTH)
-                print('point_3d\'s x', point_3d.xyz.x)
-                print('point_3d\'s y', point_3d.xyz.y)
-                print('point_3d\'s z', point_3d.xyz.z)
+                # print('point_3d\'s x', point_3d.xyz.x)
+                # print('point_3d\'s y', point_3d.xyz.y)
+                # print('point_3d\'s z', point_3d.xyz.z)
+                print(
+                    "The target book's location-{0} point: point_2d is [{1}, {2}], point_3d is [{3}, {4}, {5}]".format(
+                        i, color_point_2d.xy.x, color_point_2d.xy.y, point_3d.xyz.x, point_3d.xyz.y, point_3d.xyz.z))
